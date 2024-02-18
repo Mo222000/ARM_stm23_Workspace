@@ -6,10 +6,10 @@
 /*******************************************Defines:*************************************************/
 /****************************************************************************************************/
 #define RCC_ClkHSION        			0x00000001  // HSI clock enable
-#define RCC_ClkHSEON_NOTBYPASS       	0x00010000  // HSE clock enable oscillator not bypassed
-#define RCC_ClkHSEON_BYPASS   	  		0x00050000  // HSE clock enable bypassed with an external clock
-#define RCC_ClkPLLON   	     			0x01000000  // PLL enable
+#define RCC_ClkHSEON			       	0x00010000  // HSE clock enable oscillator not bypassed
+#define RCC_ClkPLLON   	     			0x01000000  // PLL enable 
 
+/*select system clock options:*/
 #define RCC_SYSCLK_HSI					0x00000000 	//system clock switch to HSI
 #define RCC_SYSCLK_HSE 					0x00000001	//system clock switch to HSE
 #define RCC_SYSCLK_PLL					0x00000002  // System clock switch to PLL
@@ -112,7 +112,6 @@ ErrorStatus_t RCC_ControlClock (uint32_t clock, RCC_enumStatus_t Status);
 */
 ErrorStatus_t RCC_ConfigurePLL (uint32_t RCC_PLLSRC, uint32_t Copy_M, uint32_t Copy_N, uint32_t copy_p, uint32_t copy_q);
 
-
 /**
 *@brief  : function to Select System Clock. Before calling this Function, You MUST be sure the selected clock is enabled and have their time to be ready
 *@param  : System Clock
@@ -120,6 +119,12 @@ ErrorStatus_t RCC_ConfigurePLL (uint32_t RCC_PLLSRC, uint32_t Copy_M, uint32_t C
 */
 ErrorStatus_t RCC_SelectSystemClock(uint32_t SysClk);
 
+/**
+*@brief  : function to configure the HSE bypass state, Before calling this function please insure that HSE is not the current system clock.
+*@param  : BypassState
+*@return : Error state -return 0 means that function done successfully-
+*/
+ErrorStatus_t RCC_Control_HSEBypass(uint32_t status);
 
 /**
 *@brief  : function to control the status of peripheral. Before calling this Function, You MUST be sure the selected preipheral connected to AHB1.

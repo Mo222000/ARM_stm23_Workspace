@@ -6,6 +6,8 @@
 #define RCC_HSERDY      	 			0x00020000  	// HSE clock ready flag
 #define RCC_PLLRDY	       				0x02000000  	// PLL clock ready flag
 
+#define RCC_HSE_BYPASS_ON				0x00040000		//Bypassed
+
 #define RCC_PLLCFGR_PLLQ_OFFSET       	0x00000018  	// PLLQ[3:0]: Main PLL division factor for USB OTG FS, SDIO, and RNG
 #define RCC_PLLCFGR_PLLP_OFFSET       	0x00000010  	// PLLP[1:0]: Main PLL division factor for main system clock
 #define RCC_PLLCFGR_PLLN_OFFSET       	0x00000006  	// PLLN[8:0]: Main PLL multiplication factor for VCO
@@ -51,7 +53,7 @@ RCC_T *const RCC = (RCC_T *) RCC_BASE;
 static uint32_t RCC_CheckReadyFlag(uint32_t sysclk)
 {
 	uint32_t value;
-	if((sysclk == RCC_SYSCLK_HSE) || (sysclk == RCC_ClkHSEON_BYPASS) || (sysclk == RCC_ClkHSEON_NOTBYPASS))
+	if((sysclk == RCC_SYSCLK_HSE))
 	{
 		value = RCC->CR & RCC_HSERDY;
 	}
@@ -79,7 +81,7 @@ ErrorStatus_t RCC_ControlClock (uint32_t clock, RCC_enumStatus_t Status)
 		Loc_return = ArgumentError;
 	}
 
-	else if ((clock != RCC_ClkHSEON_BYPASS)&&(clock != RCC_ClkHSEON_NOTBYPASS)&&(clock != RCC_ClkHSION)&&(clock != RCC_ClkPLLON))
+	else if ((clock != RCC_ClkHSEON)&&(clock != RCC_ClkHSEON)&&(clock != RCC_ClkHSION)&&(clock != RCC_ClkPLLON))
 	{
 		Loc_return = ArgumentError;
 	}
@@ -178,6 +180,39 @@ ErrorStatus_t RCC_SelectSystemClock(uint32_t SysClk)
 		{
 			Loc_Return = NotOk;
 		}
+	}
+	return Loc_Return;
+}
+
+/**
+*@brief  : function to configure the HSE bypass state, Before calling this function please insure that HSE is not the current system clock.
+*@param  : BypassState
+*@return : Error state -return 0 means that function done successfully-
+*/
+ErrorStatus_t RCC_Control_HSEBypass(uint32_t status)
+{
+	ErrorStatus_t Loc_Return = Ok;
+	if((status != Status_Disable) || (status != Status_Enable))
+	{
+		Loc_Return = ArgumentError;
+	}
+	else
+	{
+		switch (status)
+		{
+		case Status_Disable:
+			RCC->CR &= ~(RCC_HSE_BYPASS_ON);	
+		break;
+		
+		case Status_Enable:
+			RCC->CR |= RCC_HSE_BYPASS_ON;
+		break;
+
+		default:
+			/*do nothing*/
+		break;
+		}
+		Loc_Return = Ok;
 	}
 	return Loc_Return;
 }
@@ -324,7 +359,7 @@ ErrorStatus_t RCC_ConfigureAPB2_PreScaler(uint32_t RCC_APB2_PRESCALER)
 	ErrorStatus_t Loc_Return = Ok;
 	if((RCC_APB2_PRESCALER !=RCC_APB2_PRESCALER_DIV1) || (RCC_APB2_PRESCALER !=RCC_APB2_PRESCALER_DIV2) || (RCC_APB2_PRESCALER !=RCC_APB2_PRESCALER_DIV4) || (RCC_APB2_PRESCALER !=RCC_APB2_PRESCALER_DIV8) || (RCC_APB2_PRESCALER !=RCC_APB2_PRESCALER_DIV16))
 	{
-		ErrorStatus_t Loc_Return = ArgumentError;
+		Loc_Return = ArgumentError;
 	}
 	else
 	{
@@ -347,7 +382,7 @@ ErrorStatus_t RCC_ConfigureAPB1_PreScaler(uint32_t RCC_APB1_PRESCALER)
 	ErrorStatus_t Loc_Return = Ok;
 	if((RCC_APB1_PRESCALER !=RCC_APB1_PRESCALER_DIV1) || (RCC_APB1_PRESCALER !=RCC_APB1_PRESCALER_DIV2) || (RCC_APB1_PRESCALER !=RCC_APB1_PRESCALER_DIV4) || (RCC_APB1_PRESCALER !=RCC_APB1_PRESCALER_DIV8) || (RCC_APB1_PRESCALER !=RCC_APB1_PRESCALER_DIV16))
 	{
-		ErrorStatus_t Loc_Return = ArgumentError;
+		Loc_Return = ArgumentError;
 	}
 	else
 	{
