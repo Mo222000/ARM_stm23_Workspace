@@ -11,7 +11,8 @@
 #define RCC_PLLCFGR_PLLN_OFFSET       	0x00000006  	// PLLN[8:0]: Main PLL multiplication factor for VCO
 #define RCC_PLLCFGR_PLLM_OFFSET       	0x00000000  	// PLLM[5:0]: Division factor for the main PLL and audio PLL
 #define RCC_PLLCFGR_MASK				0x0F037FFF
-
+#define RCC_PPRE2_CLEAR_MASK 			0x0000E000		//APB2 Prescaler Mask 
+#define RCC_PPRE1_CLEAR_MASK 			0x00001C00		//APB1 Prescaler Mask 
 /************************************************RCC peripheral structure*****************************************************/
 typedef struct {
 	volatile uint32_t CR;      					/*!< RCC clock control register */
@@ -181,5 +182,203 @@ ErrorStatus_t RCC_SelectSystemClock(uint32_t SysClk)
 	return Loc_Return;
 }
 
-/**/
-/**/
+/**
+*@brief  : function to control on any clock. Before calling this Function, You MUST be sure the selected preipheral connected to AHB1.
+*@param  : ClockName, status
+*@return : Error state -return 0 means that function done successfully-
+*/
+ErrorStatus_t RCC_Control_AHB1Peripherals(uint32_t RCC_PERI_AHB1, RCC_enumStatus_t Status)
+{
+	ErrorStatus_t Loc_Return = Ok;
+	if((Status != Status_Enable) || (Status != Status_Disable))
+	{
+		Loc_Return = ArgumentError;
+	}
+	else
+	{
+		Loc_Return = Ok;
+		switch (Status)
+		{
+			case Status_Enable:
+				RCC->AHB1ENR |= RCC_PERI_AHB1;
+			break;
+			
+			case Status_Disable:
+				RCC->AHB1ENR &= ~RCC_PERI_AHB1;
+			break;
+
+			default:
+				/*do nothing*/
+			break;
+		}
+	}
+	return Loc_Return;
+}
+
+/**
+*@brief  : function to control on any clock. Before calling this Function, You MUST be sure the selected preipheral connected to AHB2.
+*@param  : ClockName, status
+*@return : Error state -return 0 means that function done successfully-
+*/
+ErrorStatus_t RCC_Control_AHB2Peripherals(uint32_t RCC_PERI_AHB2, RCC_enumStatus_t Status)
+{
+		ErrorStatus_t Loc_Return = Ok;
+	if((Status != Status_Enable) || (Status != Status_Disable))
+	{
+		Loc_Return = ArgumentError;
+	}
+	else
+	{
+		Loc_Return = Ok;
+		switch (Status)
+		{
+			case Status_Enable:
+				RCC->AHB2ENR |= RCC_PERI_AHB2;
+			break;
+			
+			case Status_Disable:
+				RCC->AHB2ENR &= ~RCC_PERI_AHB2;
+			break;
+
+			default:
+				/*do nothing*/
+			break;
+		}
+	}
+	return Loc_Return;
+}
+
+/**
+*@brief  : function to control on any clock. Before calling this Function, You MUST be sure the selected preipheral connected to APB1.
+*@param  : ClockName, status
+*@return : Error state -return 0 means that function done successfully-
+*/
+ErrorStatus_t RCC_Control_APB1Peripherals(uint32_t RCC_PERI_APB1, RCC_enumStatus_t Status)
+{
+	ErrorStatus_t Loc_Return = Ok;
+	if((Status != Status_Enable) || (Status != Status_Disable))
+	{
+		Loc_Return = ArgumentError;
+	}
+	else
+	{
+		Loc_Return = Ok;
+		switch (Status)
+		{
+			case Status_Enable:
+				RCC->APB1ENR |= RCC_PERI_APB1;
+			break;
+			
+			case Status_Disable:
+				RCC->APB1ENR &= ~RCC_PERI_APB1;
+			break;
+
+			default:
+				/*do nothing*/
+			break;
+		}
+	}
+	return Loc_Return;
+}
+
+/**
+*@brief  : function to control on any clock. Before calling this Function, You MUST be sure the selected preipheral connected to APB2.
+*@param  : ClockName, status
+*@return : Error state -return 0 means that function done successfully-
+*/
+ErrorStatus_t RCC_Control_APB2Peripherals(uint32_t RCC_PERI_APB2, RCC_enumStatus_t Status)
+{
+	ErrorStatus_t Loc_Return = Ok;
+	if((Status != Status_Enable) || (Status != Status_Disable))
+	{
+		Loc_Return = ArgumentError;
+	}
+	else
+	{
+		Loc_Return = Ok;
+		switch (Status)
+		{
+			case Status_Enable:
+				RCC->APB2ENR |= RCC_PERI_APB2;
+			break;
+			
+			case Status_Disable:
+				RCC->APB2ENR &= ~RCC_PERI_APB2;
+			break;
+
+			default:
+				/*do nothing*/
+			break;
+		}
+	}
+	return Loc_Return;	
+}
+
+/**
+*@brief  : function to configure the value of APB2 pre_scaler.
+*@param  : PreScaler
+*@return : Error state -return 0 means that function done successfully-
+*/
+ErrorStatus_t RCC_ConfigureAPB2_PreScaler(uint32_t RCC_APB2_PRESCALER)
+{
+	ErrorStatus_t Loc_Return = Ok;
+	if((RCC_APB2_PRESCALER !=RCC_APB2_PRESCALER_DIV1) || (RCC_APB2_PRESCALER !=RCC_APB2_PRESCALER_DIV2) || (RCC_APB2_PRESCALER !=RCC_APB2_PRESCALER_DIV4) || (RCC_APB2_PRESCALER !=RCC_APB2_PRESCALER_DIV8) || (RCC_APB2_PRESCALER !=RCC_APB2_PRESCALER_DIV16))
+	{
+		ErrorStatus_t Loc_Return = ArgumentError;
+	}
+	else
+	{
+		uint32_t TempReg = RCC->CFGR;
+		TempReg &= ~RCC_PPRE2_CLEAR_MASK;
+		TempReg |= RCC_APB2_PRESCALER;
+		RCC->CFGR = TempReg;
+		Loc_Return = Ok; 
+	}
+	return Loc_Return;
+}
+
+/**
+*@brief  : function to configure the value of APB1 pre_scaler.
+*@param  : PreScaler
+*@return : Error state -return 0 means that function done successfully-
+*/
+ErrorStatus_t RCC_ConfigureAPB1_PreScaler(uint32_t RCC_APB1_PRESCALER)
+{
+	ErrorStatus_t Loc_Return = Ok;
+	if((RCC_APB1_PRESCALER !=RCC_APB1_PRESCALER_DIV1) || (RCC_APB1_PRESCALER !=RCC_APB1_PRESCALER_DIV2) || (RCC_APB1_PRESCALER !=RCC_APB1_PRESCALER_DIV4) || (RCC_APB1_PRESCALER !=RCC_APB1_PRESCALER_DIV8) || (RCC_APB1_PRESCALER !=RCC_APB1_PRESCALER_DIV16))
+	{
+		ErrorStatus_t Loc_Return = ArgumentError;
+	}
+	else
+	{
+		uint32_t TempReg = RCC->CFGR;
+		TempReg &= ~RCC_PPRE1_CLEAR_MASK;
+		TempReg |= RCC_APB1_PRESCALER;
+		RCC->CFGR = TempReg;
+		Loc_Return = Ok; 
+	}
+	return Loc_Return;
+}
+
+/**
+*@brief  : function to configure the value of AHB pre_scaler.
+*@param  : PreScaler
+*@return : Error state -return 0 means that function done successfully-
+*/
+ErrorStatus_t RCC_ConfigureAHB_PreScaler(uint32_t RCC_AHB_PRESCALER)
+{
+	ErrorStatus_t Loc_return = Ok;
+	if(( RCC_AHB_PRESCALER < RCC_AHB_PRESCALER_DIV1) || (RCC_AHB_PRESCALER > RCC_AHB_PRESCALER_DIV512))
+	{
+		Loc_return = ArgumentError;
+	}
+	else
+	{
+		uint32_t TempReg = RCC->CFGR;
+		TempReg &= ~RCC_AHB_PRESCALER_DIV512;
+		TempReg |= RCC_AHB_PRESCALER;
+		RCC->CFGR = TempReg;
+		Loc_return = Ok; 
+	}
+	return Loc_return;
+}

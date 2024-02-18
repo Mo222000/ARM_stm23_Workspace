@@ -52,6 +52,32 @@
 #define RCC_PERI_APB2ENR_TIM10      	0x00020000U  // Timer 10 clock enable
 #define RCC_PERI_APB2ENR_TIM11      	0x00040000U  // Timer 11 clock enable
 
+/*APB2 Prescaler options:*/
+#define RCC_APB2_PRESCALER_DIV1   		0x00000000  // HCLK not divided for APB2
+#define RCC_APB2_PRESCALER_DIV2   		0x00008000  // HCLK divided by 2 for APB2
+#define RCC_APB2_PRESCALER_DIV4   		0x0000A000  // HCLK divided by 4 for APB2
+#define RCC_APB2_PRESCALER_DIV8   		0x0000C000  // HCLK divided by 8 for APB2
+#define RCC_APB2_PRESCALER_DIV16  		0x0000E000  // HCLK divided by 16 for APB2
+
+/*APB1 prescaler options:*/
+#define RCC_APB1_PRESCALER_DIV1   		0x00000000  // HCLK not divided for APB1
+#define RCC_APB1_PRESCALER_DIV2   		0x00001000  // HCLK divided by 2 for APB1
+#define RCC_APB1_PRESCALER_DIV4   		0x00001400  // HCLK divided by 4 for APB1
+#define RCC_APB1_PRESCALER_DIV8   		0x00001800  // HCLK divided by 8 for APB1
+#define RCC_APB1_PRESCALER_DIV16  		0x00001C00  // HCLK divided by 16 for APB1
+
+/*AHB prescaler options:*/
+#define RCC_AHB_PRESCALER_DIV1     		0x00000000  // System clock not divided
+#define RCC_AHB_PRESCALER_DIV2     		0x00000080  // System clock divided by 2
+#define RCC_AHB_PRESCALER_DIV4     		0x00000090  // System clock divided by 4
+#define RCC_AHB_PRESCALER_DIV8     		0x000000A0  // System clock divided by 8
+#define RCC_AHB_PRESCALER_DIV16    		0x000000B0  // System clock divided by 16
+#define RCC_AHB_PRESCALER_DIV64    		0x000000C0  // System clock divided by 64
+#define RCC_AHB_PRESCALER_DIV128   		0x000000D0  // System clock divided by 128
+#define RCC_AHB_PRESCALER_DIV256   		0x000000E0  // System clock divided by 256
+#define RCC_AHB_PRESCALER_DIV512   		0x000000F0  // System clock divided by 512
+
+
 /****************************************************************************************************/
 /*******************************************Types:***************************************************/
 /****************************************************************************************************/
@@ -96,20 +122,51 @@ ErrorStatus_t RCC_SelectSystemClock(uint32_t SysClk);
 
 
 /**
-*@brief  : function to control on any clock
-*@param  : ClockName, status
+*@brief  : function to control the status of peripheral. Before calling this Function, You MUST be sure the selected preipheral connected to AHB1.
+*@param  : PeripheralName, status
 *@return : Error state -return 0 means that function done successfully-
-*@Notice : Before calling this Function, You MUST be sure the selected clock is not the system clock
 */
-ErrorStatus_t RCC_ControlPeripheral(uint32_t Peripheral, RCC_enumStatus_t Status);
-
+ErrorStatus_t RCC_Control_AHB1Peripherals(uint32_t RCC_PERI_AHB1, RCC_enumStatus_t Status);
 
 /**
-*@brief  : function to control on any clock
-*@param  : ClockName, status
+*@brief  : function to control the status of peripheral. Before calling this Function, You MUST be sure the selected preipheral connected to AHB2.
+*@param  : PeripheralName, status
 *@return : Error state -return 0 means that function done successfully-
-*@Notice : Before calling this Function, You MUST be sure the selected clock is not the system clock
 */
-ErrorStatus_t RCC_ConfigurePreScaler(uint32_t Bus, uint32_t PreScaler);
+ErrorStatus_t RCC_Control_AHB2Peripherals(uint32_t RCC_PERI_AHB2, RCC_enumStatus_t Status);
 
+/**
+*@brief  : function to control the status of peripheral. Before calling this Function, You MUST be sure the selected preipheral connected to APB1.
+*@param  : PeripheralName, status
+*@return : Error state -return 0 means that function done successfully-
+*/
+ErrorStatus_t RCC_Control_APB1Peripherals(uint32_t RCC_PERI_APB1, RCC_enumStatus_t Status);
+
+/**
+*@brief  : function to control the status of peripheral. Before calling this Function, You MUST be sure the selected preipheral connected to APB2.
+*@param  : PeripheralName, status
+*@return : Error state -return 0 means that function done successfully-
+*/
+ErrorStatus_t RCC_Control_APB2Peripherals(uint32_t RCC_PERI_APB2, RCC_enumStatus_t Status);
+
+/**
+*@brief  : function to configure the value of AHB pre_scaler.
+*@param  : PreScaler
+*@return : Error state -return 0 means that function done successfully-
+*/
+ErrorStatus_t RCC_ConfigureAHB_PreScaler(uint32_t RCC_AHB_PRESCALER);
+
+/**
+*@brief  : function to configure the value of APB1 pre_scaler.
+*@param  : PreScaler
+*@return : Error state -return 0 means that function done successfully-
+*/
+ErrorStatus_t RCC_ConfigureAPB1_PreScaler(uint32_t PreScaler);
+
+/**
+*@brief  : function to configure the value of APB2 pre_scaler.
+*@param  : PreScaler
+*@return : Error state -return 0 means that function done successfully-
+*/
+ErrorStatus_t RCC_ConfigureAPB2_PreScaler(uint32_t RCC_APB2_PRESCALER);
 #endif
