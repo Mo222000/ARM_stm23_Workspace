@@ -5,12 +5,12 @@
 #define GPIO_PUPD_MASK              0x00000018
 #define GPIO_CLR_MASK               0x00000003
 
-#define GPIO_OTYPER_SHIFT           2
-#define GPIO_PUPD_SHIFT             3
+#define GPIO_OTYPER_SHIFT           0x00000002
+#define GPIO_PUPD_SHIFT             0x00000003
 
-#define GPIO_1BIT_REGISTER          1
-#define GPIO_2BIT_REGISTER          2
-#define GPIO_4BIT_REGISTER          4
+#define GPIO_1BIT_REGISTER          0x00000001
+#define GPIO_2BIT_REGISTER          0x00000002
+#define GPIO_4BIT_REGISTER          0x00000004
 
 #define GPIO_HALF_WORD_SIZE         16
 
@@ -46,27 +46,27 @@ ErrorStatus_t GPIO_Init(GPIO_PIN_t* Copy_PinStruct)
         Loc_Return = ArgumentError;
     }
     else if (
-        (Copy_PinStruct->mode != GPIO_MODE_IN_FL) ||
-        (Copy_PinStruct->mode != GPIO_MODE_IN_PU) ||
-        (Copy_PinStruct->mode != GPIO_MODE_IN_PD) ||
-        (Copy_PinStruct->mode != GPIO_MODE_OUT_PP) ||
-        (Copy_PinStruct->mode != GPIO_MODE_OUT_PP_PU) ||
-        (Copy_PinStruct->mode != GPIO_MODE_OUT_PP_PD) ||
-        (Copy_PinStruct->mode != GPIO_MODE_OUT_OD) ||
-        (Copy_PinStruct->mode != GPIO_MODE_OUT_OD_PU) ||
-        (Copy_PinStruct->mode != GPIO_MODE_OUT_OD_PD) ||
-        (Copy_PinStruct->mode != GPIO_MODE_AF_PP) ||
-        (Copy_PinStruct->mode != GPIO_MODE_AF_PP_PU) ||
-        (Copy_PinStruct->mode != GPIO_MODE_AF_PP_PD) ||
-        (Copy_PinStruct->mode != GPIO_MODE_AF_OD) ||
-        (Copy_PinStruct->mode != GPIO_MODE_AF_OD_PU) ||
-        (Copy_PinStruct->mode != GPIO_MODE_AF_OD_PD) ||
+        (Copy_PinStruct->mode != GPIO_MODE_IN_FL) &&
+        (Copy_PinStruct->mode != GPIO_MODE_IN_PU) &&
+        (Copy_PinStruct->mode != GPIO_MODE_IN_PD) &&
+        (Copy_PinStruct->mode != GPIO_MODE_OUT_PP) &&
+        (Copy_PinStruct->mode != GPIO_MODE_OUT_PP_PU) &&
+        (Copy_PinStruct->mode != GPIO_MODE_OUT_PP_PD) &&
+        (Copy_PinStruct->mode != GPIO_MODE_OUT_OD) &&
+        (Copy_PinStruct->mode != GPIO_MODE_OUT_OD_PU) &&
+        (Copy_PinStruct->mode != GPIO_MODE_OUT_OD_PD) &&
+        (Copy_PinStruct->mode != GPIO_MODE_AF_PP) &&
+        (Copy_PinStruct->mode != GPIO_MODE_AF_PP_PU) &&
+        (Copy_PinStruct->mode != GPIO_MODE_AF_PP_PD) &&
+        (Copy_PinStruct->mode != GPIO_MODE_AF_OD) &&
+        (Copy_PinStruct->mode != GPIO_MODE_AF_OD_PU) &&
+        (Copy_PinStruct->mode != GPIO_MODE_AF_OD_PD) &&
         (Copy_PinStruct->mode != GPIO_MODE_AN)
     ) {
         Loc_Return = ArgumentError;
     }
-    else if((Copy_PinStruct->port != GPIO_PORTA)||
-            (Copy_PinStruct->port != GPIO_PORTB)||
+    else if((Copy_PinStruct->port != GPIO_PORTA)&&
+            (Copy_PinStruct->port != GPIO_PORTB)&&
             (Copy_PinStruct->port != GPIO_PORTC)
     )
     {
@@ -113,7 +113,7 @@ ErrorStatus_t GPIO_Init(GPIO_PIN_t* Copy_PinStruct)
 ErrorStatus_t GPIO_SetPinValue(void* Copy_port, uint32_t Copy_Pin, uint32_t Copy_state)
 {
     ErrorStatus_t Loc_Return = NotOk;
-    if((Copy_port != GPIO_PORTA )||(Copy_port != GPIO_PORTB)||(Copy_port != GPIO_PORTC))
+    if((Copy_port != GPIO_PORTA ) && (Copy_port != GPIO_PORTB) && (Copy_port != GPIO_PORTC))
     {
         Loc_Return = ArgumentError;
     }
@@ -121,10 +121,10 @@ ErrorStatus_t GPIO_SetPinValue(void* Copy_port, uint32_t Copy_Pin, uint32_t Copy
     {
         Loc_Return = ArgumentError;
     }
-    else if ((Copy_state != GPIO_SPEED_HIGH)||(Copy_state != GPIO_STATE_LOW))
+    /*else if ((Copy_state != GPIO_SPEED_HIGH) && (Copy_state != GPIO_STATE_LOW))
     {
         Loc_Return = ArgumentError;
-    }
+    }*/
     else
     {
         Loc_Return = Ok;
@@ -154,7 +154,7 @@ ErrorStatus_t GPIO_SetPinValue(void* Copy_port, uint32_t Copy_Pin, uint32_t Copy
 ErrorStatus_t GPIO_GetPinValue(void* Copy_port, uint32_t Copy_Pin, uint8_t* Copy_PinState)
 {
     ErrorStatus_t Loc_Return = NotOk;
-    if((Copy_port != GPIO_PORTA )||(Copy_port != GPIO_PORTB)||(Copy_port != GPIO_PORTC))
+    if((Copy_port != GPIO_PORTA ) && (Copy_port != GPIO_PORTB) &&(Copy_port != GPIO_PORTC))
     {
         Loc_Return = ArgumentError;
     }
@@ -169,3 +169,4 @@ ErrorStatus_t GPIO_GetPinValue(void* Copy_port, uint32_t Copy_Pin, uint8_t* Copy
     }
     return Loc_Return;
 }
+
