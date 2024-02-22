@@ -11,9 +11,6 @@
     3- LED connection type optins:
         LED_CONNECTION_FORWARD
         LED_CONNECTION_REVERSE
-    4- Led initial state options:
-        LED_STATE_ON
-        LED_STATE_OFF
 */
 
 const LED_CNFG_t Led[_LED_NUMBER]=
@@ -23,12 +20,11 @@ const LED_CNFG_t Led[_LED_NUMBER]=
 		.port		=			,
 		.pin		=			,
 		.ConnectionType	=			,
-		.state		=			,
 	}*/
 
     [RED_LED]=
     {
-        .pin            = GPIO_PIN2,
+        .pin            = GPIO_PIN0,
         .port           = GPIO_PORTA,
         .connectionType = LED_CONNECTION_FORWARD,
     },
