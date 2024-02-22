@@ -167,4 +167,5 @@ ErrorStatus_t GPIO_GetPinValue(void* Copy_port, uint32_t Copy_Pin, uint8_t* Copy
         Loc_Return = Ok;
         *Copy_PinState = (((GPIO_t*)Copy_port)->IDR >> Copy_Pin) & 1;
     }
+    return Loc_Return;
 }

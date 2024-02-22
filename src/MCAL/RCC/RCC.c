@@ -225,7 +225,7 @@ ErrorStatus_t RCC_Control_HSEBypass(uint32_t status)
 ErrorStatus_t RCC_Control_AHB1Peripherals(uint32_t RCC_PERI_AHB1, RCC_enumStatus_t Status)
 {
 	ErrorStatus_t Loc_Return = Ok;
-	if((Status != Status_Enable) || (Status != Status_Disable))
+	if((Status != Status_Enable) && (Status != Status_Disable))
 	{
 		Loc_Return = ArgumentError;
 	}
@@ -258,7 +258,7 @@ ErrorStatus_t RCC_Control_AHB1Peripherals(uint32_t RCC_PERI_AHB1, RCC_enumStatus
 ErrorStatus_t RCC_Control_AHB2Peripherals(uint32_t RCC_PERI_AHB2, RCC_enumStatus_t Status)
 {
 		ErrorStatus_t Loc_Return = Ok;
-	if((Status != Status_Enable) || (Status != Status_Disable))
+	if((Status != Status_Enable) && (Status != Status_Disable))
 	{
 		Loc_Return = ArgumentError;
 	}
@@ -291,7 +291,7 @@ ErrorStatus_t RCC_Control_AHB2Peripherals(uint32_t RCC_PERI_AHB2, RCC_enumStatus
 ErrorStatus_t RCC_Control_APB1Peripherals(uint32_t RCC_PERI_APB1, RCC_enumStatus_t Status)
 {
 	ErrorStatus_t Loc_Return = Ok;
-	if((Status != Status_Enable) || (Status != Status_Disable))
+	if((Status != Status_Enable) && (Status != Status_Disable))
 	{
 		Loc_Return = ArgumentError;
 	}
@@ -324,7 +324,7 @@ ErrorStatus_t RCC_Control_APB1Peripherals(uint32_t RCC_PERI_APB1, RCC_enumStatus
 ErrorStatus_t RCC_Control_APB2Peripherals(uint32_t RCC_PERI_APB2, RCC_enumStatus_t Status)
 {
 	ErrorStatus_t Loc_Return = Ok;
-	if((Status != Status_Enable) || (Status != Status_Disable))
+	if((Status != Status_Enable) && (Status != Status_Disable))
 	{
 		Loc_Return = ArgumentError;
 	}
@@ -357,7 +357,7 @@ ErrorStatus_t RCC_Control_APB2Peripherals(uint32_t RCC_PERI_APB2, RCC_enumStatus
 ErrorStatus_t RCC_ConfigureAPB2_PreScaler(uint32_t RCC_APB2_PRESCALER)
 {
 	ErrorStatus_t Loc_Return = Ok;
-	if((RCC_APB2_PRESCALER !=RCC_APB2_PRESCALER_DIV1) || (RCC_APB2_PRESCALER !=RCC_APB2_PRESCALER_DIV2) || (RCC_APB2_PRESCALER !=RCC_APB2_PRESCALER_DIV4) || (RCC_APB2_PRESCALER !=RCC_APB2_PRESCALER_DIV8) || (RCC_APB2_PRESCALER !=RCC_APB2_PRESCALER_DIV16))
+	if((RCC_APB2_PRESCALER !=RCC_APB2_PRESCALER_DIV1) && (RCC_APB2_PRESCALER !=RCC_APB2_PRESCALER_DIV2) && (RCC_APB2_PRESCALER !=RCC_APB2_PRESCALER_DIV4) && (RCC_APB2_PRESCALER !=RCC_APB2_PRESCALER_DIV8) && (RCC_APB2_PRESCALER !=RCC_APB2_PRESCALER_DIV16))
 	{
 		Loc_Return = ArgumentError;
 	}
@@ -380,7 +380,7 @@ ErrorStatus_t RCC_ConfigureAPB2_PreScaler(uint32_t RCC_APB2_PRESCALER)
 ErrorStatus_t RCC_ConfigureAPB1_PreScaler(uint32_t RCC_APB1_PRESCALER)
 {
 	ErrorStatus_t Loc_Return = Ok;
-	if((RCC_APB1_PRESCALER !=RCC_APB1_PRESCALER_DIV1) || (RCC_APB1_PRESCALER !=RCC_APB1_PRESCALER_DIV2) || (RCC_APB1_PRESCALER !=RCC_APB1_PRESCALER_DIV4) || (RCC_APB1_PRESCALER !=RCC_APB1_PRESCALER_DIV8) || (RCC_APB1_PRESCALER !=RCC_APB1_PRESCALER_DIV16))
+	if((RCC_APB1_PRESCALER !=RCC_APB1_PRESCALER_DIV1) && (RCC_APB1_PRESCALER !=RCC_APB1_PRESCALER_DIV2) && (RCC_APB1_PRESCALER !=RCC_APB1_PRESCALER_DIV4) && (RCC_APB1_PRESCALER !=RCC_APB1_PRESCALER_DIV8) && (RCC_APB1_PRESCALER !=RCC_APB1_PRESCALER_DIV16))
 	{
 		Loc_Return = ArgumentError;
 	}
@@ -403,7 +403,7 @@ ErrorStatus_t RCC_ConfigureAPB1_PreScaler(uint32_t RCC_APB1_PRESCALER)
 ErrorStatus_t RCC_ConfigureAHB_PreScaler(uint32_t RCC_AHB_PRESCALER)
 {
 	ErrorStatus_t Loc_return = Ok;
-	if(( RCC_AHB_PRESCALER < RCC_AHB_PRESCALER_DIV1) || (RCC_AHB_PRESCALER > RCC_AHB_PRESCALER_DIV512))
+	if(( RCC_AHB_PRESCALER < RCC_AHB_PRESCALER_DIV1) && (RCC_AHB_PRESCALER > RCC_AHB_PRESCALER_DIV512))
 	{
 		Loc_return = ArgumentError;
 	}
