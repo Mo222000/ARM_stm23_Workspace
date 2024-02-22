@@ -1,5 +1,5 @@
 int main ()
 {
-    GPIO_TEST();
+    LED_TEST();
     return 0;
 }

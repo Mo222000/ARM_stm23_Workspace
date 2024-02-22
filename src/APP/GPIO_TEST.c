@@ -1,3 +1,4 @@
+/*
 #include <MCAL/RCC/RCC.h>
 #include <MCAL/GPIO/GPIO.h>
 
@@ -17,4 +18,4 @@ void GPIO_TEST ()
 
     }
     
-}
+}*/

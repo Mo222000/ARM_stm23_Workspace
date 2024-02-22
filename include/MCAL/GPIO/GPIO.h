@@ -1,3 +1,7 @@
+#ifndef GPIO
+#define GPIO
+
+
 #include <stdint.h>
 #include <ErrorStatus.h>
 /**************************************************************Defines:*******************************************************************/
@@ -85,3 +89,6 @@ ErrorStatus_t GPIO_SetPinValue(void* Copy_port, uint32_t Copy_Pin, uint32_t Copy
 *@return : Error state -return 0 means that function done successfully-
 */
 ErrorStatus_t GPIO_GetPinValue(void* Copy_port, uint32_t Copy_Pin, uint8_t* Copy_PinState);
+
+
+#endif
