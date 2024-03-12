@@ -1,5 +1,5 @@
 int main ()
 {
-    LED_TEST();
+    NVIC_TEST();
     return 0;
 }

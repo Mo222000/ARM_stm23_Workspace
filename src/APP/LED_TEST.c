@@ -1,10 +1,10 @@
-#include <HAL/LED/LED.h>
-#include <HAL/SWITCH/SWITCH.h>
-
+//#include <HAL/LED/LED.h>
+//#include <HAL/SWITCH/SWITCH.h>
+/*
 uint8_t flag =0;
 uint8_t sw_state =0;
 
-void LED_TEST ()
+/*void LED_TEST ()
 {
     LED_init();
     SWITCH_init();
@@ -36,4 +36,4 @@ void LED_TEST ()
         
     }
     
-}
+}*/

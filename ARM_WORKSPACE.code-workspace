@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "ARM_WORKSPACE",
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"stdint.h": "c"
+		}
+	}
+}
