@@ -38,6 +38,7 @@
   "C_Cpp_Runner.compilerArgs": [],
   "C_Cpp_Runner.linkerArgs": [],
   "C_Cpp_Runner.includePaths": [
+    "C:/Users/AL_hamd/Documents/PlatformIO/Projects/ARM_WORKSPACE/src/LIB",
     "c:/Users/AL_hamd/Documents/PlatformIO/Projects/ARM_WORKSPACE/include",
     "c:/Users/AL_hamd/Documents/PlatformIO/Projects/ARM_WORKSPACE/src",
     "c:/Users/AL_hamd/Documents/PlatformIO/Projects/ARM_WORKSPACE/include/APP",
