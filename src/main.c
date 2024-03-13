@@ -1,5 +1,5 @@
 int main ()
 {
-    NVIC_TEST();
+    SYSTICK_TSET();
     return 0;
 }
