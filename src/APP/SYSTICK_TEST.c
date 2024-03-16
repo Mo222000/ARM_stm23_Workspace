@@ -1,19 +1,9 @@
 #include <MCAL/SYSTICK/SYSTICK.h>
 #include <HAL/LED/LED.h>
 
-uint8_t static volatile RED_FLAG = 0;
 void SYSTICK_HANDLER (void)
 {
-    if (RED_FLAG == 0)
-    {
-        LED_setstatus(RED_LED, LED_STATE_ON);
-        RED_FLAG = 1;    
-    }
-    else
-    {
-        LED_setstatus(RED_LED, LED_STATE_OFF);
-        RED_FLAG = 0;
-    }    
+    LED_Toggle(RED_LED);
 }
 
 void SYSTICK_TSET (void)

@@ -22,7 +22,7 @@ typedef struct
 SYSTICK_Type *const SYSTICK = (SYSTICK_Type*) SYSTICK_BASE_ADDRESS;  
 
 /* flag to source clock of systick will be 0 if clock source divied by 8 and 1 if it not divided */
-uint8_t Global_ClockSourceFlag = 3;
+static uint8_t Global_ClockSourceFlag = 3;
 
 SYSTICK_CBF_t Current_CBF;
 

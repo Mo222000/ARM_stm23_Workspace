@@ -36,4 +36,11 @@ ErrorStatus_t LED_init(void);
 */
 ErrorStatus_t LED_setstatus(uint32_t copy_led, uint8_t copy_status);
 
+/**
+*@brief  : function to toggle specific led state. please insure first you defined this led in LED_CNFG.h and LED_CNFG.c files and call init function first.
+*@param  : LedName
+*@return : Error state -return 0 means that function done successfully-
+*/
+ErrorStatus_t LED_Toggle(uint32_t copy_led);
+
 #endif
