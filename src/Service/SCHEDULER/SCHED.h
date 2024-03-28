@@ -8,7 +8,7 @@
 
 
 /********************************************************Defines:*************************************************/
-#define SCHED_TICK_TIME             500
+#define SCHED_TICK_TIME             10
 
 
 /********************************************************Types:***************************************************/
@@ -19,7 +19,6 @@ typedef struct
     char* Name;                                 //name of runnable
     uint32_t DelayMs;                           //delay will apply before the first run
     uint32_t Periodicity;                       //periodicity of your runnable
-    uint32_t Priority;                          //priority of your runnable
     CallBacK_Pointer_t CB;                      //pointer pointed on your runnable
 }Runnable_t;
 

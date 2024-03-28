@@ -8,7 +8,7 @@
 /*---------------------------------------------------------------------------------------------------*/
 /*                                           Variables:                                              */
 /*---------------------------------------------------------------------------------------------------*/
-static volatile SCHED_PendingTicks = 0 ;
+static volatile uint32_t SCHED_PendingTicks = 1 ;
 
 /*---------------------------------------------------------------------------------------------------*/
 /*                                           Extern:                                                 */
@@ -30,7 +30,7 @@ static void SCHED (void)
     for(Current_Runnable =0 ; Current_Runnable < _RunnableNumber ; Current_Runnable++)
     {
         /**check if the delay time is passed and call back function is set*/
-        if((Runnables_Arr[Current_Runnable].CB) && (TimeStampMs > Runnables_Arr[Current_Runnable].DelayMs) && (TimeStampMs % Runnables_Arr[Current_Runnable].Periodicity))
+        if((Runnables_Arr[Current_Runnable].CB) && (TimeStampMs % Runnables_Arr[Current_Runnable].Periodicity == 0))
         {
             Runnables_Arr[Current_Runnable].CB();
         }
@@ -52,6 +52,8 @@ void SCHED_Init (void)
 {
     SYSTICK_SetTime_ms(SCHED_TICK_TIME);
     SYSTICK_SetCallBack(TickIncrement);
+    SYSTICK_ControlIRQ(SYSTICK_IQR_ENABLE);
+    SYSTICK_ConfigureClock(SYSTICK_CLOCK_AHB);
 }
 
 /**

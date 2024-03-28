@@ -1,8 +1,7 @@
 #include <HAL/LED/LED.h>
 
-void BlinkingLed(void)
+void BlinkingLed (void)
 {
-    LED_init();
-    LED_setstatus(RED_LED, LED_STATE_OFF);
-    
+    LED_Toggle(RED_LED);
+    LED_Toggle(GREEN_LED);
 }

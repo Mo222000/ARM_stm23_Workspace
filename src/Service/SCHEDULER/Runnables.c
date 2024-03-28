@@ -3,7 +3,7 @@
 /*---------------------------------------------------------------------------------------------------*/
 /*                                           Extern Prototypes                                       */
 /*---------------------------------------------------------------------------------------------------*/
-
+extern void BlinkingLed(void);
 
 /*---------------------------------------------------------------------------------------------------*/
 /*                                           Runnables List                                          */
@@ -14,10 +14,15 @@ const Runnable_t Runnables_Arr [_RunnableNumber]=
      * [Name]=
      * {    .Name = 
      *      .Periodicity= 
-     *      .Priority = 
      *      .DelayMs =
      *      .CB = 
      * }
      */
+    [BlinkingLed_Runnable]=
+    {
+        .Name = "Blinking Led For Test",
+        .Periodicity = 10000,
+        .CB = &BlinkingLed,
+    }
     
 };

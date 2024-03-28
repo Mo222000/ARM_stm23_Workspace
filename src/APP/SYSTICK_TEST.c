@@ -1,9 +1,11 @@
+/*
 #include <MCAL/SYSTICK/SYSTICK.h>
 #include <HAL/LED/LED.h>
 
 void SYSTICK_HANDLER (void)
 {
     LED_Toggle(RED_LED);
+    LED_Toggle(GREEN_LED);
 }
 
 void SYSTICK_TSET (void)
@@ -19,3 +21,4 @@ void SYSTICK_TSET (void)
 
     }
 }
+*/
