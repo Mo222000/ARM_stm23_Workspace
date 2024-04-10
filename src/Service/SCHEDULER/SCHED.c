@@ -6,6 +6,16 @@
 #include <Service/SCHEDULER/SCHED.h>
 
 /*---------------------------------------------------------------------------------------------------*/
+/*                                           Typedefs:                                               */
+/*---------------------------------------------------------------------------------------------------*/
+typedef struct
+{
+    Runnable_t* Runnable;
+    uint32_t RemainingTime;
+}ExtraRunnableInfo_t;
+
+
+/*---------------------------------------------------------------------------------------------------*/
 /*                                           Variables:                                              */
 /*---------------------------------------------------------------------------------------------------*/
 static volatile uint32_t SCHED_PendingTicks = 1 ;
@@ -14,7 +24,7 @@ static volatile uint32_t SCHED_PendingTicks = 1 ;
 /*                                           Extern:                                                 */
 /*---------------------------------------------------------------------------------------------------*/
 extern const Runnable_t Runnables_Arr [_RunnableNumber];
-
+ExtraRunnableInfo_t Runnable_Info_Array [_RunnableNumber];
 /*---------------------------------------------------------------------------------------------------*/
 /*                                           Static Function:                                        */
 /*---------------------------------------------------------------------------------------------------*/
@@ -26,17 +36,17 @@ static void TickIncrement (void)
 static void SCHED (void)
 {
     static uint32_t Current_Runnable = 0;
-    static uint32_t TimeStampMs = 0;
     for(Current_Runnable =0 ; Current_Runnable < _RunnableNumber ; Current_Runnable++)
     {
         /**check if the delay time is passed and call back function is set*/
-        if((Runnables_Arr[Current_Runnable].CB) && (TimeStampMs % Runnables_Arr[Current_Runnable].Periodicity == 0))
+        if((Runnables_Arr[Current_Runnable].CB) && (Runnable_Info_Array[Current_Runnable].RemainingTime == 0))
         {
+         
             Runnables_Arr[Current_Runnable].CB();
+            Runnable_Info_Array[Current_Runnable].RemainingTime = Runnable_Info_Array[Current_Runnable].Runnable->Periodicity;
         }
+         Runnable_Info_Array[Current_Runnable].RemainingTime -= SCHED_TICK_TIME;
     }
-    /* increment the time stamp variable by the value of tick time */
-    TimeStampMs += SCHED_TICK_TIME;
 }
 
 /*---------------------------------------------------------------------------------------------------*/
@@ -54,6 +64,12 @@ void SCHED_Init (void)
     SYSTICK_SetCallBack(TickIncrement);
     SYSTICK_ControlIRQ(SYSTICK_IQR_ENABLE);
     SYSTICK_ConfigureClock(SYSTICK_CLOCK_AHB);
+
+    for(uint32_t itr =0 ; itr < _RunnableNumber ; itr++)
+    {
+        Runnable_Info_Array[itr].Runnable = &Runnables_Arr[itr];
+        Runnable_Info_Array[itr].RemainingTime = Runnables_Arr[itr].DelayMs;
+    }
 }
 
 /**

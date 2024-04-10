@@ -24,8 +24,8 @@ const LED_CNFG_t Led[_LED_NUMBER]=
 
     [RED_LED]=
     {
-        .pin            = GPIO_PIN0,
-        .port           = GPIO_PORTA,
+        .pin            = GPIO_PIN1,
+        .port           = GPIO_PORTB,
         .connectionType = LED_CONNECTION_FORWARD,
     },
 
