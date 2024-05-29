@@ -15,6 +15,8 @@ typedef struct
     uint8_t cursor_y;
     uint8_t* string;
     uint8_t strSize;
+    uint64_t Number;
+    uint32_t DigitsNumber;
 }LCD_UserRequest_t;
 
 #define CONCAT_HELPER(pin7, pin6, pin5, pin4, pin3, pin2, pin1, pin0) (0b##pin7##pin6##pin5##pin4##pin3##pin2##pin1##pin0)
@@ -44,11 +46,19 @@ enum
 enum 
 {
     LCD_enumRequest_Write ,
+    LCD_enumRequest_WriteNumber ,
     LCD_enumRequest_clear,
     LCD_enumRequest_SetCursor,
     LCD_enumRequest_NoRequest
 };
 
+
+enum 
+{
+    LCD_WriteNumberState_CalculateDigits,
+    LCD_WriteNumberState_Print,
+    LCD_WriteNumberState_Finished
+};
 /**********************************************************************************************************/
 /*******************************************************Variables: ****************************************/
 /**********************************************************************************************************/
@@ -64,7 +74,7 @@ static void LCD_WriteStringProcess(void);
 static void LCD_ClearProcess(void);
 static void LCD_WriteCommandProcess(uint8_t Command);
 static void LCD_WriteDataProcess(uint8_t data);
-
+static void LCD_WriteNumberProcess(void);
 /**********************************************************************************************************/
 /*******************************************************APIs: *********************************************/
 /**********************************************************************************************************/
@@ -157,26 +167,16 @@ ErrorStatus_t LCD_initAsynch(void)
     return Loc_Return; // Return the status of initialization
 }
 
-ErrorStatus_t LCD_WriteStringAsynch(uint8_t* string, uint8_t copy_X_Position, uint8_t copy_Y_position)
+ErrorStatus_t LCD_WriteStringAsynch(uint8_t* string)
 {
     ErrorStatus_t Loc_Return = Ok;
     if(string == NULL)
     {
         Loc_Return = NullPointerError;
     }
-    else if( copy_X_Position > 2)
-    {
-        Loc_Return = ArgumentError;
-    }
-    else if( copy_Y_position > 16)
-    {
-        Loc_Return = ArgumentError;
-    }
     else
     {
         Loc_Return = Ok;
-        User_Req.cursor_x = copy_X_Position;
-        User_Req.cursor_y = copy_Y_position;
         User_Req.ReqState = LCD_enumState_Busy;
         User_Req.ReqType = LCD_enumRequest_Write;
         User_Req.string = string;
@@ -248,29 +248,7 @@ static void LCD_InitProcess(void)
 static void LCD_WriteStringProcess(void)
 {
     static uint32_t TimeCounter = 0;
-    if(TimeCounter == 0)
-    {
-        switch (User_Req.cursor_y)
-        {
-            case 0:
-                LCD_WriteCommandProcess(CURSOR_SET + User_Req.cursor_y);
-            break;
-            
-            case 1:
-                LCD_WriteCommandProcess(CURSOR_SET + User_Req.cursor_y + 64);
-            break;
-
-            default:
-                /* do nothing */
-            break;
-        }
-    }
-    else if(TimeCounter == 1)
-    {
-        /* trigger enable pin */
-        GPIO_SetPinValue(LCD_Config[E].port, LCD_Config[E].pin, GPIO_STATE_LOW);
-    }
-    else if(TimeCounter > 1 && User_Req.string[TimeCounter-2] != '\0')
+    if(User_Req.string[TimeCounter] != '\0')
     {
         //if(!EnablepinTriggerd)
         //{
@@ -285,15 +263,11 @@ static void LCD_WriteStringProcess(void)
         //    EnablepinTriggerd = 0;
         //}
 
-        LCD_WriteDataProcess(User_Req.string[TimeCounter-2]);
-        GPIO_SetPinValue(LCD_Config[E].port, LCD_Config[E].pin, GPIO_STATE_LOW);
-
-
+        LCD_WriteDataProcess(User_Req.string[TimeCounter]);
+        GPIO_SetPinValue(LCD_Config[E].port, LCD_Config[E].pin, GPIO_STATE_LOW);                
     }
     else 
     {
-        User_Req.cursor_x = 0;
-        User_Req.cursor_y = 0;
         User_Req.string = NULL;
         User_Req.ReqState = LCD_enumState_Idle;
         User_Req.ReqType = LCD_enumRequest_NoRequest;
@@ -329,6 +303,75 @@ void LCD_ClearAsynch(void)
     User_Req.ReqState = LCD_enumState_Busy;
 }
 
+
+
+ErrorStatus_t LCD_WriteNumberAsynch(uint64_t Number)
+{
+    if(LCD_Global_State == LCD_enumState_Operational && User_Req.ReqState == LCD_enumState_Idle)
+    {
+        User_Req.Number = Number;
+        User_Req.ReqType = LCD_enumRequest_WriteNumber;
+        User_Req.ReqState = LCD_enumState_Busy;
+        if(Number == 0)
+        {
+            User_Req.DigitsNumber = 1;
+        }
+        while (Number != 0)
+        {
+            Number= Number/10;
+            User_Req.DigitsNumber = User_Req.DigitsNumber + 1;
+        }
+        
+    }
+    return Ok;
+}
+
+void LCD_WriteNumberProcess(void)
+{
+    static uint32_t Counter = 0;
+    uint8_t DigitsBuffer[15] = {0};
+    static uint8_t WriteNumberState = 0;
+
+    switch (WriteNumberState)
+    {
+        case LCD_WriteNumberState_CalculateDigits:
+            while (User_Req.Number > 0)
+            {
+                uint8_t digit = User_Req.Number % 10;
+                DigitsBuffer[Counter] = digit + '0';
+                User_Req.Number /= 10;
+                Counter++;
+            }
+            WriteNumberState = LCD_WriteNumberState_Print;
+        break;
+        
+        case LCD_WriteNumberState_Print:
+            for (uint8_t itr = Counter-1 ; itr >= 0; itr--)
+            {
+                LCD_WriteDataProcess(DigitsBuffer[itr]);
+                Counter--;
+                break;
+            }
+            GPIO_SetPinValue(LCD_Config[E].port, LCD_Config[E].pin, GPIO_STATE_LOW);
+            if (Counter == 0)
+            {
+                WriteNumberState = LCD_WriteNumberState_Finished;
+            } 
+        break;
+
+        case LCD_WriteNumberState_Finished:
+            User_Req.DigitsNumber =0;
+            User_Req.Number =0;
+            User_Req.ReqState = LCD_enumState_Idle;
+            User_Req.ReqType= LCD_enumRequest_NoRequest;
+        break;
+
+        default:
+        
+        break;
+    }
+}
+
 void LCD_Runnable(void)
 {
     switch (LCD_Global_State)
@@ -343,13 +386,12 @@ void LCD_Runnable(void)
         break;
         
         case LCD_enumState_Operational:
-            if(User_Req.ReqState == LCD_enumState_Busy && 1)
+            if(User_Req.ReqState == LCD_enumState_Busy)
             {
                 switch(User_Req.ReqType)
                 {
                     case LCD_enumRequest_Write:
                         LCD_WriteStringProcess();
-                        LED_Toggle(GREEN_LED);
                     break;
                     
                     case LCD_enumRequest_clear:
@@ -358,6 +400,10 @@ void LCD_Runnable(void)
                     
                     case LCD_enumRequest_SetCursor:
                         //LCD_SetCursorProcess();
+                    break;
+
+                    case LCD_enumRequest_WriteNumber:
+                        LCD_WriteNumberProcess();
                     break;
 
                     default:
@@ -375,3 +421,7 @@ void LCD_Runnable(void)
         break;
     }
 }
+
+
+
+

@@ -106,7 +106,7 @@ ErrorStatus_t LCD_initAsynch(void);
  *     // String write operation successful
  * }
  */
-ErrorStatus_t LCD_WriteStringAsynch(uint8_t* string, uint8_t copy_X_Position, uint8_t copy_Y_position);
+ErrorStatus_t LCD_WriteStringAsynch(uint8_t* string);
 
 
 /**
@@ -118,5 +118,26 @@ ErrorStatus_t LCD_WriteStringAsynch(uint8_t* string, uint8_t copy_X_Position, ui
  * 
  */
 void LCD_ClearAsynch(void);
+
+
+
+/**
+ * @brief Writes a number onto the LCD asynchronously.
+ * 
+ * This function asynchronously writes a numeric value onto the LCD screen. The number provided as
+ * input is converted to its string representation and then displayed on the LCD. Asynchronous operation
+ * means that the function does not block program execution while performing its task, allowing other
+ * tasks to continue running concurrently.
+ * 
+ * @param Number The numeric value to be written onto the LCD.
+ * 
+ * @return ErrorStatus_t An enumeration indicating the success or failure of the operation.
+ *                        Possible values include:
+ *                        - SUCCESS: Operation completed successfully.
+ *                        - ERROR: Operation encountered an error.
+ */
+ErrorStatus_t LCD_WriteNumberAsynch(uint64_t Number);
+
+
 
 #endif

@@ -13,10 +13,10 @@ LCD_PinConfig LCD_Config[LCD_MODE]=
     [D4]    = {.port = GPIO_PORTA,     .pin = GPIO_PIN4},
     [D5]    = {.port = GPIO_PORTA,     .pin = GPIO_PIN5},
     [D6]    = {.port = GPIO_PORTA,     .pin = GPIO_PIN6},
-    [D7]    = {.port = GPIO_PORTA,     .pin = GPIO_PIN7},
+    [D7]    = {.port = GPIO_PORTB,     .pin = GPIO_PIN5},
     #endif
     
-    [RW]    = {.port = GPIO_PORTA,     .pin = GPIO_PIN8},
-    [RS]    = {.port = GPIO_PORTA,     .pin = GPIO_PIN9},
-    [E]     = {.port = GPIO_PORTA,     .pin = GPIO_PIN10},
+    [RS]    = {.port = GPIO_PORTB,     .pin = GPIO_PIN6},
+    [RW]    = {.port = GPIO_PORTB,     .pin = GPIO_PIN7},
+    [E]     = {.port = GPIO_PORTB,     .pin = GPIO_PIN8},
 };

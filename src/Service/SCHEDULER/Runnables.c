@@ -7,6 +7,7 @@ extern void BlinkingLed(void);
 extern void LCD_Runnable(void);
 extern void LCD_Write();
 extern void BlinkingLed2(void);
+extern void RUNNABLE_LCD(void);
 /*---------------------------------------------------------------------------------------------------*/
 /*                                           Runnables List                                          */
 /*---------------------------------------------------------------------------------------------------*/
@@ -25,7 +26,7 @@ Runnable_t Runnables_Arr [_RunnableNumber]=
         .Name = "Blinking Led For Test",
         .Periodicity = 1000,
         .CB = &BlinkingLed,
-        .DelayMs = 10000
+        .DelayMs = 1000,
     },
 
     /*[BlinkingLed_Runnable2]=
@@ -39,15 +40,15 @@ Runnable_t Runnables_Arr [_RunnableNumber]=
     [LCD_RUNNABLE]=
     {
         .Name = "Lcd_runnable",
-        .Periodicity = 10,
-        .CB = &LCD_Runnable
+        .Periodicity = 20,
+        .CB = &LCD_Runnable,
     },
 
    [LCD_Writing_runnable]=
     {
         .Name = "write",
-        .Periodicity = 100,
-        .DelayMs = 10000,
+        .Periodicity = 10,
+        .DelayMs = 1000,
         .CB = &LCD_Write,
     },
     

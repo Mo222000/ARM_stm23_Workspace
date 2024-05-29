@@ -25,7 +25,7 @@ const SWITCH_CNFG_t SWITCH[_SWITCH_NUMBER]=
     [Test_Switch]=
     {
         .pin            = GPIO_PIN2,
-        .port           = GPIO_PORTA,
+        .port           = GPIO_PORTC,
         .connectionType = SWITCH_CONNECTION_PULLUP,
     }
 };
